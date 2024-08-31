@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres_tdr_2023:
+    image: postgres:15
+    container_name: tdr_2023
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: tdr_2023
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+    volumes:
+      - postgres_tdr_data_2023:/var/lib/postgresql/data
+
+  postgres_tdr_2024:
+    image: postgres:15
+    container_name: tdr_2024
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: tdr_2024
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+    volumes:
+      - postgres_tdr_data_2024:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: tdr
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_JSON: '{
+            "spring.datasource.tdr2024.url" : "jdbc:postgresql://postgres_tdr_2024:5432/tdr_2024?createDatabaseIfNotExist=true",
+            "spring.datasource.tdr2023.url" : "jdbc:postgresql://postgres_tdr_2023:5432/tdr_2023?createDatabaseIfNotExist=true"
+          }'
+    depends_on:
+      - postgres_tdr_2023
+      - postgres_tdr_2024
+
+volumes:
+  postgres_tdr_data_2023:
+  postgres_tdr_data_2024:
