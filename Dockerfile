@@ -5,7 +5,7 @@ FROM openjdk:21-jdk
 WORKDIR /app
 
 # Copy the Maven/Gradle built jar file into the container
-COPY target/e-mobility-charging-solutions-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY target/trip-solutions-0.0.1-SNAPSHOT.jar /app/app.jar
 
 # Expose the port the application runs on
 EXPOSE 8080

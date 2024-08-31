@@ -26,7 +26,7 @@ import java.util.Objects;
  * Trip Detail Records (tdrs) for the year 2024. It utilizes HikariCP for
  * connection pooling and Flyway for database migrations.</p>
  *
- * <p>The configuration enables JPA repositories for the `tdr.emobility.charging.solutions.repository._2024`
+ * <p>The configuration enables JPA repositories for the `tdr.solutions.repository._2024`
  * package, and associates the corresponding entity manager and transaction manager beans
  * with these repositories.</p>
  */

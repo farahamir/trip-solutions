@@ -1,9 +1,9 @@
-# E-Mobility Charging Solutions Platform
+# Trip Solutions Platform
 
 This project is a Spring Boot-based REST API for managing Trip Detail Records (CDR) in real-time for a network of 
 Trip Point Operators (CPO).
 The system uses range-based sharding to efficiently manage large datasets by distributing records across multiple
-PostgreSQL databases based on the `startTime` of the charging session.
+PostgreSQL databases based on the `startTime` of the Trip session.
 Each Year has its DB instance where old data can be removed easily.
 The configuration of the shards in the classes can be configured.
 ## Features
