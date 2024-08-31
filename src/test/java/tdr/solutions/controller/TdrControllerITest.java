@@ -54,7 +54,7 @@ class TdrControllerITest {
     }
 
     @Test
-    void createSameCdrReturnException() throws Exception {
+    void createSameTdrReturnException() throws Exception {
         TripDetailRecordEntity tripDetailRecordEntity = new TripDetailRecordEntity();
         tripDetailRecordEntity.setVehicleId("vehicle-id123");
         tripDetailRecordEntity.setTotalCost(20.0);

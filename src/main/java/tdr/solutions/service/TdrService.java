@@ -17,9 +17,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Service class responsible for handling operations related to Trip Detail Records (CDRs).
+ * Service class responsible for handling operations related to Trip Detail Records (TDRs).
  * This service interacts with the underlying database sharding service and repositories to
- * create, retrieve, and manage CDRs.
+ * create, retrieve, and manage TDRs.
  */
 @Service
 public class TdrService {
@@ -28,7 +28,7 @@ public class TdrService {
     private final TdrShardingService tdrShardingService;
 
     /**
-     * Constructor for {@code CdrService}.
+     * Constructor for {@code TdrService}.
      *
      * @param tdrShardingService the service responsible for determining the appropriate shard
      *                           and providing access to the corresponding repository.
@@ -38,18 +38,18 @@ public class TdrService {
     }
 
     /**
-     * Creates a new Trip Detail Record (CDR) in the appropriate shard.
+     * Creates a new Trip Detail Record (TDR) in the appropriate shard.
      *
-     * @param cdr the CDR to be created, must be valid.
-     * @return the created CDR.
+     * @param tdr the TDR to be created, must be valid.
+     * @return the created TDR.
      * @throws TdrException if there is an issue during the creation process, such as data integrity violations.
      */
-    public TripDetailRecord createTdr(@Valid TripDetailRecord cdr) throws TdrException {
-        var cdrRepository = tdrShardingService.determineShard(cdr.startTime());
-        TripDetailRecordEntity tripDetailRecordEntity = getTripDetailRecordEntity(cdr);
+    public TripDetailRecord createTdr(@Valid TripDetailRecord tdr) throws TdrException {
+        var tdrRepository = tdrShardingService.determineShard(tdr.startTime());
+        TripDetailRecordEntity tripDetailRecordEntity = getTripDetailRecordEntity(tdr);
         TripDetailRecordEntity result;
         try {
-            result = cdrRepository.save(tripDetailRecordEntity);
+            result = tdrRepository.save(tripDetailRecordEntity);
         } catch (DataIntegrityViolationException e) {
             throw new TdrException(e.getMessage());
         }
@@ -57,12 +57,12 @@ public class TdrService {
     }
 
     /**
-     * Retrieves a Trip Detail Record (CDR) by its session ID.
+     * Retrieves a Trip Detail Record (TDR) by its session ID.
      * This method uses caching to improve performance for frequently accessed session IDs.
      *
-     * @param sessionId the session ID of the CDR to be retrieved.
-     * @return the CDR associated with the given session ID.
-     * @throws TdrException if no CDR is found for the given session ID.
+     * @param sessionId the session ID of the TDR to be retrieved.
+     * @return the TDR associated with the given session ID.
+     * @throws TdrException if no TDR is found for the given session ID.
      */
     @Cacheable(value = "sessionIds", key = "#sessionId")
     public TripDetailRecord getTdrBySessionId(String sessionId) throws TdrException {
@@ -77,11 +77,11 @@ public class TdrService {
     }
 
     /**
-     * Retrieves a list of Trip Detail Records (CDRs) for a specific vehicle ID, with pagination and sorting.
+     * Retrieves a list of Trip Detail Records (TDRs) for a specific vehicle ID, with pagination and sorting.
      *
-     * @param vehicleId the ID of the vehicle whose CDRs are to be retrieved.
+     * @param vehicleId the ID of the vehicle whose TDRs are to be retrieved.
      * @param pageable  the pagination and sorting information.
-     * @return a list of CDRs for the specified vehicle, sorted by the specified criteria.
+     * @return a list of TDRs for the specified vehicle, sorted by the specified criteria.
      */
     public List<TripDetailRecord> getTdrsByVehicleId(String vehicleId, Pageable pageable) {
         var map = tdrShardingService.getJpaRepositoryHashMap();
@@ -97,24 +97,24 @@ public class TdrService {
     /**
      * Converts a {@link TripDetailRecord} model to a {@link TripDetailRecordEntity} entity.
      *
-     * @param cdr the CDR model to convert.
-     * @return the corresponding CDR entity.
+     * @param tdr the TDR model to convert.
+     * @return the corresponding TDR entity.
      */
-    private static TripDetailRecordEntity getTripDetailRecordEntity(TripDetailRecord cdr) {
+    private static TripDetailRecordEntity getTripDetailRecordEntity(TripDetailRecord tdr) {
         TripDetailRecordEntity tripDetailRecordEntity = new TripDetailRecordEntity();
-        tripDetailRecordEntity.setSessionId(cdr.sessionId());
-        tripDetailRecordEntity.setVehicleId(cdr.vehicleId());
-        tripDetailRecordEntity.setStartTime(cdr.startTime());
-        tripDetailRecordEntity.setEndTime(cdr.endTime());
-        tripDetailRecordEntity.setTotalCost(cdr.totalCost());
+        tripDetailRecordEntity.setSessionId(tdr.sessionId());
+        tripDetailRecordEntity.setVehicleId(tdr.vehicleId());
+        tripDetailRecordEntity.setStartTime(tdr.startTime());
+        tripDetailRecordEntity.setEndTime(tdr.endTime());
+        tripDetailRecordEntity.setTotalCost(tdr.totalCost());
         return tripDetailRecordEntity;
     }
 
     /**
      * Converts a {@link TripDetailRecordEntity} entity to a {@link TripDetailRecord} model.
      *
-     * @param tripDetailRecordEntity the CDR entity to convert.
-     * @return the corresponding CDR model.
+     * @param tripDetailRecordEntity the TDR entity to convert.
+     * @return the corresponding TDR model.
      */
     private static TripDetailRecord getTripDetailRecord(TripDetailRecordEntity tripDetailRecordEntity) {
         return new TripDetailRecord(

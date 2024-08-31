@@ -1,6 +1,6 @@
 # Trip Solutions Platform
 
-This project is a Spring Boot-based REST API for managing Trip Detail Records (CDR) in real-time for a network of 
+This project is a Spring Boot-based REST API for managing Trip Detail Records (TDR) in real-time for a network of 
 Trip Point Operators (CPO).
 The system uses range-based sharding to efficiently manage large datasets by distributing records across multiple
 PostgreSQL databases based on the `startTime` of the Trip session.
@@ -39,9 +39,9 @@ The configuration of the shards in the classes can be configured.
  
 ## Project Structure
 
-- `src/main/java/com/emobility/cdr/`: Java source files.
+- `src/main/java/com/tdr/`: Java source files.
 - `src/main/resources/`: Configuration files, including `application.yml`.
-- `src/test/java/com/emobility/cdr/`: Test cases.
+- `src/test/java/com/emobility/tdr/`: Test cases.
 - `docker-compose.yml`: Docker Compose file to set up multiple PostgreSQL instances and the Spring Boot application.
 - `db/migration`: SQL files to initialize data for each year shard.
 
@@ -73,8 +73,8 @@ Once the application is running, you can access the REST API at:
 
 The application is configured with two PostgreSQL databases:
 
-- **Shard 1**: `cdr_db_shard_1` (For records with `startTime` before 2024)
-- **Shard 2**: `cdr_db_shard_2` (For records with `startTime` from 2024 onwards)
+- **Shard 1**: `tdr_db_shard_1` (For records with `startTime` before 2024)
+- **Shard 2**: `tdr_db_shard_2` (For records with `startTime` from 2024 onwards)
 
 The sharding logic routes queries to the appropriate database based on the `startTime` field.
 
@@ -105,7 +105,7 @@ Only the endpoints can be seen but not used due to security
 
 ### 7. Sharding Logic
 
-The sharding logic is implemented in the `TdrShardingService` class, which routes database operations based on the `startTime` of the CDR:
+The sharding logic is implemented in the `TdrShardingService` class, which routes database operations based on the `startTime` of the TDR:
 
 - **Shard 2024**: Handles data with `startTime` for 2024 records.
 - **Shard 2023**: Handles data with `startTime` from 2023 records.

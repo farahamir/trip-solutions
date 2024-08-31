@@ -38,34 +38,34 @@ class TdrServiceTest {
 
     @Test
     void testCreateTdr_Success() throws TdrException {
-        TripDetailRecord cdr = new TripDetailRecord("sessionId123", "vehicleId123",
+        TripDetailRecord tdr = new TripDetailRecord("sessionId123", "vehicleId123",
                 LocalDateTime.parse("2023-11-24T14:15:00"), LocalDateTime.parse("2023-11-24T14:15:00").plusHours(1), 15.0);
 
         TripDetailRecordEntity savedEntity = new TripDetailRecordEntity();
-        savedEntity.setSessionId(cdr.sessionId());
-        savedEntity.setVehicleId(cdr.vehicleId());
-        savedEntity.setStartTime(cdr.startTime());
-        savedEntity.setEndTime(cdr.endTime());
-        savedEntity.setTotalCost(cdr.totalCost());
+        savedEntity.setSessionId(tdr.sessionId());
+        savedEntity.setVehicleId(tdr.vehicleId());
+        savedEntity.setStartTime(tdr.startTime());
+        savedEntity.setEndTime(tdr.endTime());
+        savedEntity.setTotalCost(tdr.totalCost());
 
         when(tripDetailRecordRepository.save(any(TripDetailRecordEntity.class))).thenReturn(savedEntity);
 
-        TripDetailRecord result = tdrService.createTdr(cdr);
+        TripDetailRecord result = tdrService.createTdr(tdr);
 
         assertNotNull(result);
-        assertEquals(cdr.sessionId(), result.sessionId());
+        assertEquals(tdr.sessionId(), result.sessionId());
         verify(tripDetailRecordRepository, times(1)).save(any(TripDetailRecordEntity.class));
     }
 
     @Test
     void testCreateTdr_DataIntegrityViolationException() {
-        TripDetailRecord cdr = new TripDetailRecord("sessionId123", "vehicleId123",
+        TripDetailRecord tdr = new TripDetailRecord("sessionId123", "vehicleId123",
                 LocalDateTime.parse("2023-11-24T14:15:00"), LocalDateTime.parse("2023-11-24T14:15:00").plusHours(1), 15.0);
 
         when(tripDetailRecordRepository.save(any(TripDetailRecordEntity.class)))
                 .thenThrow(new DataIntegrityViolationException("Data integrity violation"));
 
-        TdrException exception = assertThrows(TdrException.class, () -> tdrService.createTdr(cdr));
+        TdrException exception = assertThrows(TdrException.class, () -> tdrService.createTdr(tdr));
 
         assertEquals("Data integrity violation", exception.getMessage());
         verify(tripDetailRecordRepository, times(1)).save(any(TripDetailRecordEntity.class));

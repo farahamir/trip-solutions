@@ -24,7 +24,7 @@ public interface TripDetailRecordRepository extends JpaRepository<TripDetailReco
     /**
      * Find all Trip Detail Records by vehicle ID.
      *
-     * @param sessionId the sessionId of the CDR
+     * @param sessionId the sessionId of the TDR
      * @return TripDetailRecord the of Trip Detail Records for the specified sessionId
      */
     TripDetailRecordEntity findBySessionId(String sessionId);
